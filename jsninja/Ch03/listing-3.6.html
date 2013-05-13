@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Listing 3.6</title>
+    <script type="text/javascript" src="../scripts/assert.js"></script>
+    <link href="../styles/assert.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <script type="text/javascript">
+
+        function forEach(list, callback) {
+            //
+            // Regarding "call()" ...
+            //
+            // First argument is function context ("this").
+            // Second argument is traditional parameter.
+            //
+            for (var n = 0; n < list.length; n++) {
+                callback.call(list[n], n);                   
+            }
+        }
+
+        var weapons = ['shuriken', 'katana', 'nunchucks']   
+
+        forEach(                                            
+            weapons,
+            function (index) {
+                assert(this == weapons[index], "Got the expected value of " + weapons[index]);
+            }
+        );
+
+    </script>
+</body>
+</html>

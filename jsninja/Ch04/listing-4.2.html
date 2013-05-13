@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Listing 4.2</title>
+    <script type="text/javascript" src="../scripts/assert.js"></script>
+    <link href="../styles/assert.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <script type="text/javascript">
+
+        //
+        // Recursion in Named Functions
+        //
+        function chirp(n) {                                      
+            return n > 1
+                ? chirp(n - 1) + "-chirpGreaterThan1"
+                : "chirpLessThan1";
+        }                                                       
+
+        assert(chirp(3) == "chirpLessThan1-chirpGreaterThan1-chirpGreaterThan1",                  
+              "Calling the named function comes naturally.");   
+
+    </script>
+</body>
+</html>

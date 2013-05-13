@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Listing 3.1</title>
+    <script type="text/javascript" src="../scripts/assert.js"></script>
+    <link href="../styles/assert.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <script type="text/javascript">
+
+        //
+        // (a) Defines a named function. The name is available throughout the
+        //     current scope and is implicitly added as a property of Window.
+        //
+        function isNimble() { return true; }                            
+
+        assert(typeof window.isNimble === "function",                  
+              "isNimble() defined");
+        assert(isNimble.name === "isNimble",
+              "isNimble() has a name");
+
+        //
+        // (b) Creates an Anonymous Function that;s assigned to the variable
+        //     'canFly'. The variable is a window property, and the 'name'
+        //     property of the function is empty.
+        //
+        var canFly = function () { return true; };                      
+
+        assert(typeof window.canFly === "function",                   
+               "canFly() defined");
+        assert(canFly.name === "",
+               "canFly() has no name");
+
+        //
+        // (c) Creates an Anonymous Function referenced by a property of
+        //     window.
+        //
+        window.isDeadly = function () { return true; };                 
+
+        assert(typeof window.isDeadly === "function",                 
+               "isDeadly() defined");
+
+        //
+        // (d) Defines an inner function inside the outer function.
+        //
+        function outer() {                                             
+            assert(typeof inner === "function",
+                   "inner() in scope before declaration");
+            function inner() { }
+            assert(typeof inner === "function",
+                  "inner() in scope after declaration");
+            assert(window.inner === undefined,
+                   "inner() not in global scope");
+        }
+
+        outer();                                                     
+        assert(window.inner === undefined,
+               "inner() still not in global scope");
+
+        //
+        // (e) The variable that we assign to a function has nothing to 
+        //     do with its name; that's controlled by what we actually
+        //     name the function in its literal.
+        //
+        window.wieldsSword = function swingsSword() { return true; };  //#9
+
+        assert(window.wieldsSword.name === 'swingsSword',
+               "wieldSword's real name is swingsSword");
+
+    </script>
+</body>
+</html>

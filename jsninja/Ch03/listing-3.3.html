@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Listing 3.3</title>
+    <script type="text/javascript" src="../scripts/assert.js"></script>
+    <link href="../styles/assert.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <script type="text/javascript">
+        // (a) Defines a function that returns its function context. This
+        // will allow us to examine the function context of a function
+        // from outside of it, after it has been invoked.
+        function creep() {
+            return this;
+        }                                
+
+        // (b) Tests invocation "as a function", and verifies that function
+        // context was the window object.
+        assert(creep() === window, "Creeping in the window");                    
+
+        // (c) Invokes the function using the "sneak" variable. Even though
+        // we've used a variable, the function is still involked "as a function"
+        // and the function context is window.
+        var sneak = creep;                                   
+        assert(sneak() === window, "Sneaking in the window");                    
+
+        // (d) Invokes the function through the "skulk" property, thus invoking 
+        // it "as a method" of ninja1. The function context is no longer window
+        // but is now ninja1.
+        var ninja1 = {                                       
+            skulk: creep                                     
+        };
+        assert(ninja1.skulk() === ninja1, "The 1st ninja is skulking");                 
+
+        // (e) Invokes the function "as a method" of ninja2, the function context
+        // is therefore ninja2.
+        var ninja2 = {                                       
+            skulk: creep                                     
+        };
+        assert(ninja2.skulk() === ninja2, "The 2nd ninja is skulking");
+
+        //
+        // IMPORTANT Re: (d) and (e) ... the same function is shared by both ninja1 
+        // and ninja2, but in each case the function has a different context - the 
+        // current owning object!
+        //
+    </script>
+</body>
+</html>
+

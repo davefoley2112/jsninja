@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Listing 4.6</title>
+    <script type="text/javascript" src="../scripts/assert.js"></script>
+    <link href="../styles/assert.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <script type="text/javascript">
+
+        var ninja = function myNinja() {
+            assert(ninja == myNinja,
+                   "This function is named two things at once!");
+        };
+
+        ninja();
+
+        assert(typeof myNinja == "undefined",
+               "But myNinja isn't defined outside of the function.");
+
+    </script>
+</body>
+</html>
