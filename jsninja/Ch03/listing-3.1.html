@@ -42,6 +42,8 @@
 
         //
         // (d) Defines an inner function inside the outer function.
+        // Tests that inner() is able to be referenced before and after 
+        // its declaration and that no global name is created for inner().
         //
         function outer() {                                             
             assert(typeof inner === "function",

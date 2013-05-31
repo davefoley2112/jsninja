@@ -1,113 +1,147 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Listing 3.2</title>
     <meta charset="utf-8">
     <script type="text/javascript" src="../scripts/assert.js"></script>
     <link href="../styles/assert.css" rel="stylesheet" type="text/css">
-  </head>
-  <body>
+</head>
+<body>
     <script type="text/javascript">
-
-      assert(true,"|----- BEFORE OUTER -----|");          //#1
-      assert(typeof outer==='function',
-            "outer() is in scope");
-      assert(typeof inner==='function',
-            "inner() is in scope");
-      assert(typeof a==='number',
-            "a is in scope");
-      assert(typeof b==='number',
-            "b is in scope");
-      assert(typeof c==='number',
-            "c is in scope");
-
-      function outer(){
-
-      assert(true,"|----- INSIDE OUTER, BEFORE a -----|");  //#2
-      assert(typeof outer==='function',
-            "outer() is in scope");
-      assert(typeof inner==='function',
-            "inner() is in scope");
-      assert(typeof a==='number',
-            "a is in scope");
-      assert(typeof b==='number',
-            "b is in scope");
-      assert(typeof c==='number',
-            "c is in scope");
-
-        var a = 1;
-
-        assert(true,"|----- INSIDE OUTER, AFTER a -----|");  //#3
-        assert(typeof outer==='function',
+        //
+        // (1) Runs the test block before we’ve defined anything at all. All our tests assert that
+        //     each item is in scope, so all but the tests for items that can be forwardreferenced
+        //     will fail. As such, only the top-level function outer() is in scope at this point.
+        //
+        assert(true, "|----- BEFORE OUTER -----|");          //#1
+        assert(typeof outer === 'function',
               "outer() is in scope");
-        assert(typeof inner==='function',
+        assert(typeof inner === 'function',
               "inner() is in scope");
-        assert(typeof a==='number',
+        assert(typeof a === 'number',
               "a is in scope");
-        assert(typeof b==='number',
+        assert(typeof b === 'number',
               "b is in scope");
-        assert(typeof c==='number',
+        assert(typeof c === 'number',
               "c is in scope");
 
-        function inner(){ /* does nothing */ }
+        function outer() {
+            //
+            // (2) Runs the test block inside function outer() but before anything else
+            //     has been declared. The outer() function is still in scope as is the inner()
+            //     function, which is defined within the outer() function. Functions can be
+            //     forward-referenced, but not variable declarations, so all other tests fail.
+            //
+            assert(true, "|----- INSIDE OUTER, BEFORE a -----|");  //#2
+            assert(typeof outer === 'function',
+                  "outer() is in scope");
+            assert(typeof inner === 'function',
+                  "inner() is in scope");
+            assert(typeof a === 'number',
+                  "a is in scope");
+            assert(typeof b === 'number',
+                  "b is in scope");
+            assert(typeof c === 'number',
+                  "c is in scope");
 
-        var b = 2;
+            var a = 1;
 
-        assert(true,"|----- INSIDE OUTER, AFTER inner() AND b -----|"); //#4
-        assert(typeof outer==='function',
-              "outer() is in scope");
-        assert(typeof inner==='function',
-              "inner() is in scope");
-        assert(typeof a==='number',
-              "a is in scope");
-        assert(typeof b==='number',
-              "b is in scope");
-        assert(typeof c==='number',
-              "c is in scope");
+            //
+            // (3) Runs the test block inside outer() and after the variable a has been declared.
+            //     Test results show that a has been added to the scope at this point.
+            //
+            assert(true, "|----- INSIDE OUTER, AFTER a -----|");  //#3
+            assert(typeof outer === 'function',
+                  "outer() is in scope");
+            assert(typeof inner === 'function',
+                  "inner() is in scope");
+            assert(typeof a === 'number',
+                  "a is in scope");
+            assert(typeof b === 'number',
+                  "b is in scope");
+            assert(typeof c === 'number',
+                  "c is in scope");
 
-        if (a == 1) {
-          var c = 3;
-          assert(true,"|----- INSIDE OUTER, INSIDE if -----|"); //#5
-          assert(typeof outer==='function',
-                "outer() is in scope");
-          assert(typeof inner==='function',
-                "inner() is in scope");
-          assert(typeof a==='number',
-                "a is in scope");
-          assert(typeof b==='number',
-                "b is in scope");
-          assert(typeof c==='number',
-                "c is in scope");
+            function inner() { /* does nothing */ }
+
+            var b = 2;
+
+            //
+            // (4) Runs test code after inner() and b have been declared. Testing shows that b has 
+            //     been added to the scope. The fact that inner() was declared at this point is moot.
+            //     Its scope extends back to the beginning of the containing function, and its declaration
+            //     certainly doesn’t remove it from the scope.
+            //
+            assert(true, "|----- INSIDE OUTER, AFTER inner() AND b -----|"); //#4
+            assert(typeof outer === 'function',
+                  "outer() is in scope");
+            assert(typeof inner === 'function',
+                  "inner() is in scope");
+            assert(typeof a === 'number',
+                  "a is in scope");
+            assert(typeof b === 'number',
+                  "b is in scope");
+            assert(typeof c === 'number',
+                  "c is in scope");
+
+            //
+            // (5) Runs tests inside if block after variable c has been declared in that block.
+            //     Tests show that all items are in scope at this point.
+            //
+            if (a == 1) {
+                var c = 3;
+                assert(true, "|----- INSIDE OUTER, INSIDE if -----|"); //#5
+                assert(typeof outer === 'function',
+                      "outer() is in scope");
+                assert(typeof inner === 'function',
+                      "inner() is in scope");
+                assert(typeof a === 'number',
+                      "a is in scope");
+                assert(typeof b === 'number',
+                      "b is in scope");
+                assert(typeof c === 'number',
+                      "c is in scope");
+            }
+
+            //
+            // (6) Runs test code inside outer() but after if block has been closed. Tests show 
+            //     that all items are in scope, even c, although the if block within which it was 
+            //     declared is closed. Unlike most other block-structured languages, variable declarations 
+            //     extend from the point of declaration to the end of the function, crossing any 
+            //     block boundaries.
+            //
+            assert(true, "|----- INSIDE OUTER, AFTER c -----|"); //#6
+            assert(typeof outer === 'function',
+                  "outer() is in scope");
+            assert(typeof inner === 'function',
+                  "inner() is in scope");
+            assert(typeof a === 'number',
+                  "a is in scope");
+            assert(typeof b === 'number',
+                  "b is in scope");
+            assert(typeof c === 'number',
+                  "c is in scope");
+
         }
 
-        assert(true,"|----- INSIDE OUTER, AFTER c -----|"); //#6
-        assert(typeof outer==='function',
-              "outer() is in scope");
-        assert(typeof inner==='function',
-              "inner() is in scope");
-        assert(typeof a==='number',
-              "a is in scope");
-        assert(typeof b==='number',
-              "b is in scope");
-        assert(typeof c==='number',
-              "c is in scope");
+        outer();
 
-      }
-
-      outer();
-
-      assert(true,"|----- AFTER OUTER -----|"); //#7
-      assert(typeof outer==='function',
-             "outer() is in scope");
-      assert(typeof inner==='function',
-             "inner() is in scope");
-      assert(typeof a==='number',
-             "a is in scope");
-      assert(typeof b==='number',
-             "b is in scope");
-      assert(typeof c==='number',
-             "c is in scope");
+        //
+        // (7) Runs tests in the global scope after outer() has been declared. Once again, only outer()
+        //     is in scope because the scope of anything declared within outer() is confined to within it.
+        //
+        assert(true, "|----- AFTER OUTER -----|"); //#7
+        assert(typeof outer === 'function',
+               "outer() is in scope");
+        assert(typeof inner === 'function',
+               "inner() is in scope");
+        assert(typeof a === 'number',
+               "a is in scope");
+        assert(typeof b === 'number',
+               "b is in scope");
+        assert(typeof c === 'number',
+               "c is in scope");
 
     </script>
-  </body>
+</body>
 </html>
